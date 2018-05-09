@@ -12,13 +12,18 @@ from frappe.model.document import Document
 
 class SetUserPermissions(Document):
 	def get_user_permissions(self):
-		# frappe.msgprint("hi")
-		entries = frappe.db.sql("""select user, allow, for_value,
+
+		query = """select user, allow, for_value,
 			apply_for_all_roles, name as user_perm_link_name 
 			from 
 				`tabUser Permission` 
 			where
-				user = '{0}'""".format(self.user), as_dict=1)
+				user = '{0}' """.format(self.user)
+
+		if self.filter_account:
+			query += " and allow = 'Account'"
+		# frappe.msgprint("hi")
+		entries = frappe.db.sql(query, as_dict=1)
 
 		# self.data1 = "pooja"
 		self.set('user_permission', [])
