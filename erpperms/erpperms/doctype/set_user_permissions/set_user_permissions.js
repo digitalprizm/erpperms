@@ -13,13 +13,8 @@ frappe.ui.form.on('Set User Permissions', {
 			callback: function(r, rt) {
 				frm.refresh_field("user_permission");
 				frm.refresh_fields();
+				// frappe.msgprint("hii");
 			}
 		});
-	}
-
-
-
-
-
-	
+	}	
 });
