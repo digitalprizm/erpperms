@@ -16,5 +16,18 @@ frappe.ui.form.on('Set User Permissions', {
 				// frappe.msgprint("hii");
 			}
 		});
-	}	
+	},
+	update_user_permissions: function(frm) {
+		return frappe.call({
+			method: "update_user_permissions",
+			doc: frm.doc,
+			freeze: true,
+			freeze_message: __("User data syncing, it might take some time"),
+			callback: function(r, rt) {
+				frm.refresh_field("user_permission");
+				frm.refresh_fields();
+				// frappe.msgprint("hii");
+			}
+		});
+	}		
 });

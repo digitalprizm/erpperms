@@ -12,7 +12,6 @@ from frappe.model.document import Document
 
 class SetUserPermissions(Document):
 	def get_user_permissions(self):
-
 		query = """select user, allow, for_value,
 			apply_for_all_roles, name as user_perm_link_name 
 			from 
@@ -20,9 +19,11 @@ class SetUserPermissions(Document):
 			where
 				user = '{0}' """.format(self.user)
 
-		if self.filter_account:
+		if self.get_all:
+			pass
+		else:
 			query += " and allow = 'Account'"
-		# frappe.msgprint("hi")
+
 		entries = frappe.db.sql(query, as_dict=1)
 
 		# self.data1 = "pooja"
@@ -56,3 +57,25 @@ class SetUserPermissions(Document):
 			# d.allow = allow
 			# d.for_value = for_value
 			# row.update(d)
+
+	def update_user_permissions(self):
+		frappe.msgprint("")
+		for i in self.user_permission:
+			is_existing = frappe.db.get_value("User Permission",{"user":self.for_user,
+				"allow":i.allow,"for_value":i.for_value},"name")
+			if not is_existing:
+				user_perm_doc = frappe.new_doc("User Permission")
+				user_perm_doc.user = self.for_user
+				user_perm_doc.allow = i.allow
+				user_perm_doc.for_value = i.for_value	
+				user_perm_doc.flags.ignore_permissions = True		
+				user_perm_doc.insert()
+				user_perm_doc.save()
+
+		frappe.msgprint("User record added successfuly")
+
+		# frappe.new_doc
+
+
+
+
